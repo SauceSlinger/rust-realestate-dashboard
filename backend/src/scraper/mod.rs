@@ -1,6 +1,6 @@
 // Market data scraper module
 use sqlx::SqlitePool;
-use crate::error::{Result, AppError};
+use crate::error::Result;
 use chrono::Utc;
 
 pub async fn scrape_market_data(pool: &SqlitePool) -> Result<()> {
@@ -83,7 +83,7 @@ async fn scrape_redfin_data(pool: &SqlitePool) -> Result<()> {
 // - scrape_trulia_data
 // - etc.
 
-pub async fn scrape_specific_location(pool: &SqlitePool, location: &str) -> Result<()> {
+pub async fn scrape_specific_location(_pool: &SqlitePool, location: &str) -> Result<()> {
     tracing::info!("Scraping data for location: {}", location);
     
     // Implement location-specific scraping

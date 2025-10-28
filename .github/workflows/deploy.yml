@@ -43,6 +43,14 @@ jobs:
         VITE_API_BASE_URL: ${{ secrets.API_BASE_URL }}
       run: npm run build
     
+    - name: Add .nojekyll file
+      working-directory: ./frontend/dist
+      run: touch .nojekyll
+    
+    - name: Copy index.html to 404.html for SPA routing
+      working-directory: ./frontend/dist
+      run: cp index.html 404.html
+    
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
       with:
