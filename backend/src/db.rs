@@ -2,7 +2,11 @@ use sqlx::{sqlite::SqlitePool, Row};
 use crate::models::*;
 
 pub async fn init_db() -> Result<SqlitePool, sqlx::Error> {
-    let pool = SqlitePool::connect("sqlite:realestate.db").await?;
+    // Use sqlite: URL with file creation enabled
+    let database_url = std::env::var("DATABASE_URL")
+        .unwrap_or_else(|_| "sqlite:./realestate.db?mode=rwc".to_string());
+    
+    let pool = SqlitePool::connect(&database_url).await?;
     
     // Create properties table
     sqlx::query(
