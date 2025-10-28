@@ -9,7 +9,7 @@ services:
     startCommand: ./target/release/realestate-backend
     envVars:
       - key: DATABASE_URL
-        value: sqlite:./data/realestate.db
+        value: sqlite::memory:
       - key: HOST
         value: 0.0.0.0
       - key: PORT
@@ -18,7 +18,3 @@ services:
         value: https://sauceslinger.github.io
       - key: RUST_LOG
         value: info,realestate_backend=debug
-    disk:
-      name: data
-      mountPath: /opt/render/project/src/backend/data
-      sizeGB: 1
