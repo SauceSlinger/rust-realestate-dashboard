@@ -1,10 +1,12 @@
 use sqlx::{sqlite::SqlitePool, Row};
 use crate::models::*;
 
+const DEFAULT_DATABASE_URL: &str = "sqlite:./realestate.db?mode=rwc";
+
 pub async fn init_db() -> Result<SqlitePool, sqlx::Error> {
     // Use sqlite: URL with file creation enabled
     let database_url = std::env::var("DATABASE_URL")
-        .unwrap_or_else(|_| "sqlite:./realestate.db?mode=rwc".to_string());
+        .unwrap_or_else(|_| DEFAULT_DATABASE_URL.to_string());
     
     let pool = SqlitePool::connect(&database_url).await?;
     
