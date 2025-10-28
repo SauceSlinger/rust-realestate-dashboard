@@ -1,0 +1,77 @@
+name: Scheduled Market Data Scraping
+
+on:
+  schedule:
+    # Run daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  scrape-market-data:
+    name: Scrape Market Data
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        profile: minimal
+        toolchain: stable
+        override: true
+    
+    - name: Cache cargo
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+          backend/target
+        key: ${{ runner.os }}-cargo-scraper-${{ hashFiles('**/Cargo.lock') }}
+    
+    - name: Build backend
+      working-directory: ./backend
+      run: cargo build --release
+    
+    - name: Run database migrations
+      working-directory: ./backend
+      env:
+        DATABASE_URL: sqlite:./data/realestate.db
+      run: |
+        cargo install sqlx-cli --no-default-features --features sqlite
+        mkdir -p data
+        sqlx database create
+        sqlx migrate run
+    
+    - name: Trigger market data scraping
+      working-directory: ./backend
+      env:
+        DATABASE_URL: sqlite:./data/realestate.db
+      run: |
+        # Start the server in the background
+        ./target/release/realestate-backend &
+        SERVER_PID=$!
+        
+        # Wait for server to start
+        sleep 10
+        
+        # Trigger scraping endpoint
+        curl -X POST http://localhost:3000/api/market/scrape
+        
+        # Wait for scraping to complete
+        sleep 30
+        
+        # Stop the server
+        kill $SERVER_PID
+    
+    - name: Upload database artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: market-data-db
+        path: backend/data/realestate.db
+        retention-days: 7
+    
+    - name: Notify on failure
+      if: failure()
+      run: echo "Market data scraping failed. Check the logs for details."
