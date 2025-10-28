@@ -1,0 +1,33 @@
+# Rust
+target/
+Cargo.lock
+*.db
+*.db-shm
+*.db-wal
+
+# Node
+node_modules/
+dist/
+*.log
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Database
+data/
+*.sqlite
+*.sqlite3
+
+# Build artifacts
+*.wasm
+*.wasm.map
