@@ -3,33 +3,171 @@
 @tailwind utilities;
 
 @layer base {
+  /* Smooth theme transitions */
+  * {
+    @apply transition-theme duration-theme;
+  }
+
+  /* Light mode (default) */
   body {
     @apply bg-gray-50 text-gray-900;
+  }
+
+  /* Dark mode */
+  .dark body {
+    @apply bg-slate-900 text-slate-100;
+  }
+
+  /* Improved scrollbar for dark mode */
+  .dark ::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  .dark ::-webkit-scrollbar-track {
+    @apply bg-slate-800;
+  }
+
+  .dark ::-webkit-scrollbar-thumb {
+    @apply bg-slate-600 rounded-lg;
+  }
+
+  .dark ::-webkit-scrollbar-thumb:hover {
+    @apply bg-slate-500;
   }
 }
 
 @layer components {
+  /* Buttons */
   .btn {
-    @apply px-4 py-2 rounded-lg font-medium transition-colors duration-200;
+    @apply px-4 py-2 rounded-lg font-medium transition-all duration-200;
   }
   
   .btn-primary {
-    @apply bg-primary-600 text-white hover:bg-primary-700;
+    @apply bg-primary-600 text-white hover:bg-primary-700 shadow-sm hover:shadow-md;
+  }
+
+  .dark .btn-primary {
+    @apply bg-primary-500 hover:bg-primary-600;
   }
   
   .btn-secondary {
     @apply bg-gray-200 text-gray-800 hover:bg-gray-300;
   }
+
+  .dark .btn-secondary {
+    @apply bg-slate-700 text-slate-200 hover:bg-slate-600;
+  }
+
+  .btn-danger {
+    @apply bg-red-600 text-white hover:bg-red-700 shadow-sm hover:shadow-md;
+  }
+
+  .dark .btn-danger {
+    @apply bg-red-500 hover:bg-red-600;
+  }
+
+  .btn-sm {
+    @apply px-3 py-1.5 text-sm;
+  }
   
+  /* Cards */
   .card {
-    @apply bg-white rounded-lg shadow-md p-6;
+    @apply bg-white rounded-lg shadow-md p-6 border border-gray-100;
+  }
+
+  .dark .card {
+    @apply bg-slate-800 border-slate-700 shadow-lg;
   }
   
+  /* Inputs */
   .input {
-    @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500;
+    @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white text-gray-900;
+  }
+
+  .dark .input {
+    @apply bg-slate-700 border-slate-600 text-slate-100 focus:ring-primary-400;
+  }
+
+  .dark .input::placeholder {
+    @apply text-slate-400;
   }
   
+  /* Labels */
   .label {
     @apply block text-sm font-medium text-gray-700 mb-1;
+  }
+
+  .dark .label {
+    @apply text-slate-300;
+  }
+
+  /* Select dropdowns */
+  select {
+    @apply bg-white dark:bg-slate-700 dark:text-slate-100 dark:border-slate-600;
+  }
+
+  /* Modal backgrounds */
+  .modal-overlay {
+    @apply bg-black bg-opacity-50;
+  }
+
+  .dark .modal-overlay {
+    @apply bg-black bg-opacity-70;
+  }
+
+  /* Tables */
+  table {
+    @apply dark:bg-slate-800;
+  }
+
+  thead {
+    @apply dark:bg-slate-700;
+  }
+
+  th {
+    @apply dark:text-slate-200;
+  }
+
+  td {
+    @apply dark:text-slate-300 dark:border-slate-700;
+  }
+
+  tr:hover {
+    @apply dark:bg-slate-700;
+  }
+}
+
+/* Custom utility classes for theme-aware components */
+@layer utilities {
+  .text-primary-themed {
+    @apply text-gray-900 dark:text-slate-100;
+  }
+
+  .text-secondary-themed {
+    @apply text-gray-600 dark:text-slate-400;
+  }
+
+  .bg-primary-themed {
+    @apply bg-white dark:bg-slate-800;
+  }
+
+  .bg-secondary-themed {
+    @apply bg-gray-50 dark:bg-slate-900;
+  }
+
+  .border-themed {
+    @apply border-gray-200 dark:border-slate-700;
+  }
+
+  .divide-themed {
+    @apply divide-gray-200 dark:divide-slate-700;
+  }
+
+  .shadow-themed {
+    @apply shadow-md dark:shadow-xl dark:shadow-slate-900/50;
+  }
+
+  .hover-bg-themed {
+    @apply hover:bg-gray-50 dark:hover:bg-slate-700;
   }
 }

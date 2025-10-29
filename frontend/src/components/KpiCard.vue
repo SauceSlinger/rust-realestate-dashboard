@@ -38,13 +38,13 @@ const trendIcon = computed(() => {
   <div class="card hover:shadow-lg transition-shadow duration-200">
     <div class="flex items-start justify-between">
       <div class="flex-1">
-        <p class="text-sm font-medium text-gray-600">{{ title }}</p>
+        <p class="text-sm font-medium text-gray-600 dark:text-slate-400">{{ title }}</p>
         <p class="text-3xl font-bold mt-2" :class="colorClasses">
           {{ value }}
         </p>
         <p v-if="trend !== undefined" class="text-sm mt-2 font-medium" :class="trendClass">
           {{ trendIcon }} {{ Math.abs(trend) }}%
-          <span class="text-gray-500 font-normal">vs last month</span>
+          <span class="text-gray-500 dark:text-slate-400 font-normal">vs last month</span>
         </p>
       </div>
       <div v-if="icon" class="text-4xl opacity-20">

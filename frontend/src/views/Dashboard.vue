@@ -3,8 +3,8 @@
     <!-- Header -->
     <div class="flex justify-between items-center">
       <div>
-        <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>
-        <p class="text-gray-600 mt-1">Welcome back! Here's your property portfolio overview.</p>
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-slate-100">Dashboard</h1>
+        <p class="text-gray-600 dark:text-slate-400 mt-1">Welcome back! Here's your property portfolio overview.</p>
       </div>
       <button @click="refreshData" class="btn btn-primary flex items-center gap-2">
         <span>🔄</span>
@@ -14,8 +14,8 @@
 
     <!-- Loading State -->
     <div v-if="loading" class="text-center py-12">
-      <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
-      <p class="text-gray-500 mt-4">Loading dashboard data...</p>
+      <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 dark:border-primary-400"></div>
+      <p class="text-gray-500 dark:text-slate-400 mt-4">Loading dashboard data...</p>
     </div>
 
     <template v-else>
@@ -55,7 +55,7 @@
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Revenue & Expenses Chart -->
         <div class="card">
-          <h2 class="text-xl font-bold text-gray-900 mb-4">Revenue vs Expenses</h2>
+          <h2 class="text-xl font-bold text-gray-900 dark:text-slate-100 mb-4">Revenue vs Expenses</h2>
           <RevenueExpenseChart
             :labels="last12Months"
             :revenue="revenueData"
@@ -65,7 +65,7 @@
 
         <!-- Property Status Chart -->
         <div class="card">
-          <h2 class="text-xl font-bold text-gray-900 mb-4">Property Status Distribution</h2>
+          <h2 class="text-xl font-bold text-gray-900 dark:text-slate-100 mb-4">Property Status Distribution</h2>
           <PropertyStatusChart
             :occupied="occupiedCount"
             :vacant="vacantCount"
@@ -83,7 +83,7 @@
 
         <!-- Quick Actions -->
         <div class="card">
-          <h2 class="text-xl font-bold text-gray-900 mb-4">Quick Actions</h2>
+          <h2 class="text-xl font-bold text-gray-900 dark:text-slate-100 mb-4">Quick Actions</h2>
           <div class="space-y-3">
             <router-link
               to="/properties"
@@ -122,42 +122,42 @@
       <!-- Recent Properties Table -->
       <div class="card">
         <div class="flex justify-between items-center mb-4">
-          <h2 class="text-xl font-bold text-gray-900">Recent Properties</h2>
-          <router-link to="/properties" class="text-primary-600 hover:text-primary-800 font-medium">
+          <h2 class="text-xl font-bold text-gray-900 dark:text-slate-100">Recent Properties</h2>
+          <router-link to="/properties" class="text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300 font-medium">
             View All →
           </router-link>
         </div>
         
         <div v-if="properties.length === 0" class="text-center py-8">
-          <p class="text-gray-500">No properties found</p>
+          <p class="text-gray-500 dark:text-slate-400">No properties found</p>
         </div>
         <div v-else class="overflow-x-auto">
-          <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
+          <table class="min-w-full divide-y divide-gray-200 dark:divide-slate-700">
+            <thead class="bg-gray-50 dark:bg-slate-800">
               <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Property</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rent</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Property</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Location</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Type</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Status</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Rent</th>
               </tr>
             </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-              <tr v-for="property in properties.slice(0, 5)" :key="property.id" class="hover:bg-gray-50">
+            <tbody class="bg-white dark:bg-slate-900 divide-y divide-gray-200 dark:divide-slate-700">
+              <tr v-for="property in properties.slice(0, 5)" :key="property.id" class="hover:bg-gray-50 dark:hover:bg-slate-800">
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <router-link :to="`/properties/${property.id}`" class="text-primary-600 hover:text-primary-800 font-medium">
+                  <router-link :to="`/properties/${property.id}`" class="text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300 font-medium">
                     {{ property.title }}
                   </router-link>
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ property.city }}, {{ property.state }}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ property.property_type }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-slate-300">{{ property.city }}, {{ property.state }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-slate-300">{{ property.property_type }}</td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full" 
                         :class="getStatusClass(property.status)">
                     {{ property.status }}
                   </span>
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-slate-300">
                   ${{ property.monthly_rent?.toLocaleString() || 'N/A' }}
                 </td>
               </tr>

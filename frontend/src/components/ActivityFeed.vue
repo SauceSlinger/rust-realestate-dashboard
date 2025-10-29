@@ -41,17 +41,17 @@ function formatTime(date: Date): string {
 
 <template>
   <div class="card">
-    <h2 class="text-xl font-bold text-gray-900 mb-4">Recent Activity</h2>
+    <h2 class="text-xl font-bold text-gray-900 dark:text-slate-100 mb-4">Recent Activity</h2>
     
     <div v-if="activities.length === 0" class="text-center py-8">
-      <p class="text-gray-500">No recent activity</p>
+      <p class="text-gray-500 dark:text-slate-400">No recent activity</p>
     </div>
     
     <div v-else class="space-y-4">
       <div
         v-for="activity in displayActivities"
         :key="activity.id"
-        class="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+        class="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
       >
         <div 
           class="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-xl"
@@ -60,13 +60,13 @@ function formatTime(date: Date): string {
           {{ activity.icon }}
         </div>
         <div class="flex-1 min-w-0">
-          <p class="text-sm font-medium text-gray-900">
+          <p class="text-sm font-medium text-gray-900 dark:text-slate-100">
             {{ activity.title }}
           </p>
-          <p class="text-sm text-gray-600 mt-1">
+          <p class="text-sm text-gray-600 dark:text-slate-400 mt-1">
             {{ activity.description }}
           </p>
-          <p class="text-xs text-gray-500 mt-1">
+          <p class="text-xs text-gray-500 dark:text-slate-500 mt-1">
             {{ formatTime(activity.timestamp) }}
           </p>
         </div>

@@ -137,12 +137,84 @@ export const useTenantStore = defineStore('tenant', () => {
     ]
   }
 
+  async function createTenant(data: Partial<Tenant>) {
+    loading.value = true
+    error.value = null
+    try {
+      const response = await tenantService.create(data)
+      tenants.value.unshift(response.data)
+      return response.data
+    } catch (e: any) {
+      error.value = e.message || 'Failed to create tenant'
+      // Demo mode: create with mock ID
+      const newTenant: Tenant = {
+        id: Math.max(...tenants.value.map(t => t.id)) + 1,
+        ...data,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      } as Tenant
+      tenants.value.unshift(newTenant)
+      return newTenant
+    } finally {
+      loading.value = false
+    }
+  }
+
+  async function updateTenant(id: number, data: Partial<Tenant>) {
+    loading.value = true
+    error.value = null
+    try {
+      const response = await tenantService.update(id, data)
+      const index = tenants.value.findIndex(t => t.id === id)
+      if (index !== -1) {
+        tenants.value[index] = response.data
+      }
+      if (currentTenant.value?.id === id) {
+        currentTenant.value = response.data
+      }
+      return response.data
+    } catch (e: any) {
+      error.value = e.message || 'Failed to update tenant'
+      // Demo mode: update locally
+      const index = tenants.value.findIndex(t => t.id === id)
+      if (index !== -1) {
+        tenants.value[index] = {
+          ...tenants.value[index],
+          ...data,
+          updated_at: new Date().toISOString()
+        }
+      }
+      throw e
+    } finally {
+      loading.value = false
+    }
+  }
+
+  async function deleteTenant(id: number) {
+    loading.value = true
+    error.value = null
+    try {
+      await tenantService.delete(id)
+      tenants.value = tenants.value.filter(t => t.id !== id)
+    } catch (e: any) {
+      error.value = e.message || 'Failed to delete tenant'
+      // Demo mode: delete locally
+      tenants.value = tenants.value.filter(t => t.id !== id)
+    } finally {
+      loading.value = false
+    }
+  }
+
   return {
     tenants,
     currentTenant,
     loading,
     error,
     fetchTenants,
-    fetchTenant
+    fetchTenant,
+    createTenant,
+    updateTenant,
+    deleteTenant,
+    generateSampleTenants
   }
 })

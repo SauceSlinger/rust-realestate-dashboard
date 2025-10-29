@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-6">
     <div class="flex justify-between items-center">
-      <h1 class="text-3xl font-bold text-gray-900">Market Insights</h1>
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-slate-100">Market Insights</h1>
       <button @click="handleScrape" class="btn btn-primary" :disabled="loading">
         {{ loading ? 'Scraping...' : 'Refresh Market Data' }}
       </button>
@@ -10,49 +10,49 @@
     <!-- Analytics Summary -->
     <div v-if="analytics" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <div class="card">
-        <div class="text-sm font-medium text-gray-600">Total Properties</div>
-        <div class="text-3xl font-bold text-gray-900 mt-2">{{ analytics.total_properties }}</div>
+        <div class="text-sm font-medium text-gray-600 dark:text-slate-400">Total Properties</div>
+        <div class="text-3xl font-bold text-gray-900 dark:text-slate-100 mt-2">{{ analytics.total_properties }}</div>
       </div>
       <div class="card">
-        <div class="text-sm font-medium text-gray-600">Portfolio Value</div>
-        <div class="text-3xl font-bold text-gray-900 mt-2">${{ formatCurrency(analytics.total_value) }}</div>
+        <div class="text-sm font-medium text-gray-600 dark:text-slate-400">Portfolio Value</div>
+        <div class="text-3xl font-bold text-gray-900 dark:text-slate-100 mt-2">${{ formatCurrency(analytics.total_value) }}</div>
       </div>
       <div class="card">
-        <div class="text-sm font-medium text-gray-600">Avg Monthly Rent</div>
-        <div class="text-3xl font-bold text-gray-900 mt-2">${{ formatCurrency(analytics.average_rent) }}</div>
+        <div class="text-sm font-medium text-gray-600 dark:text-slate-400">Avg Monthly Rent</div>
+        <div class="text-3xl font-bold text-gray-900 dark:text-slate-100 mt-2">${{ formatCurrency(analytics.average_rent) }}</div>
       </div>
       <div class="card">
-        <div class="text-sm font-medium text-gray-600">Occupancy Rate</div>
-        <div class="text-3xl font-bold text-gray-900 mt-2">{{ analytics.occupancy_rate.toFixed(1) }}%</div>
+        <div class="text-sm font-medium text-gray-600 dark:text-slate-400">Occupancy Rate</div>
+        <div class="text-3xl font-bold text-gray-900 dark:text-slate-100 mt-2">{{ analytics.occupancy_rate.toFixed(1) }}%</div>
       </div>
     </div>
 
     <!-- Market Trends -->
     <div class="card">
-      <h2 class="text-xl font-bold text-gray-900 mb-4">Market Trends</h2>
+      <h2 class="text-xl font-bold text-gray-900 dark:text-slate-100 mb-4">Market Trends</h2>
       <div v-if="loading" class="text-center py-8">
-        <p class="text-gray-500">Loading market data...</p>
+        <p class="text-gray-500 dark:text-slate-400">Loading market data...</p>
       </div>
       <div v-else-if="trends.length === 0" class="text-center py-8">
-        <p class="text-gray-500">No market data available. Click "Refresh Market Data" to scrape latest data.</p>
+        <p class="text-gray-500 dark:text-slate-400">No market data available. Click "Refresh Market Data" to scrape latest data.</p>
       </div>
       <div v-else>
         <div v-for="trend in trends" :key="trend.location" class="mb-6">
-          <h3 class="font-semibold text-lg mb-2">{{ trend.location }}</h3>
+          <h3 class="font-semibold text-lg mb-2 dark:text-slate-100">{{ trend.location }}</h3>
           <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-              <thead class="bg-gray-50">
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-slate-700">
+              <thead class="bg-gray-50 dark:bg-slate-800">
                 <tr>
-                  <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-                  <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Median Price</th>
-                  <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Inventory</th>
+                  <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase">Date</th>
+                  <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase">Median Price</th>
+                  <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase">Inventory</th>
                 </tr>
               </thead>
-              <tbody class="bg-white divide-y divide-gray-200">
+              <tbody class="bg-white dark:bg-slate-900 divide-y divide-gray-200 dark:divide-slate-700">
                 <tr v-for="(point, index) in trend.time_series.slice(0, 5)" :key="index">
-                  <td class="px-4 py-2 text-sm text-gray-900">{{ formatDate(point.date) }}</td>
-                  <td class="px-4 py-2 text-sm text-gray-900">${{ point.median_price?.toLocaleString() || 'N/A' }}</td>
-                  <td class="px-4 py-2 text-sm text-gray-900">{{ point.inventory_count?.toLocaleString() || 'N/A' }}</td>
+                  <td class="px-4 py-2 text-sm text-gray-900 dark:text-slate-300">{{ formatDate(point.date) }}</td>
+                  <td class="px-4 py-2 text-sm text-gray-900 dark:text-slate-300">${{ point.median_price?.toLocaleString() || 'N/A' }}</td>
+                  <td class="px-4 py-2 text-sm text-gray-900 dark:text-slate-300">{{ point.inventory_count?.toLocaleString() || 'N/A' }}</td>
                 </tr>
               </tbody>
             </table>
@@ -64,38 +64,46 @@
     <!-- Charts + ROI -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div class="lg:col-span-2 card">
-        <h2 class="text-xl font-bold text-gray-900 mb-4">Portfolio Performance</h2>
+        <h2 class="text-xl font-bold text-gray-900 dark:text-slate-100 mb-4">Portfolio Performance</h2>
         <PortfolioPerformanceChart :series="portfolioSeries" :categories="portfolioCategories" />
       </div>
 
       <div class="card">
-        <h2 class="text-xl font-bold text-gray-900 mb-4">Rent vs Expenses</h2>
+        <h2 class="text-xl font-bold text-gray-900 dark:text-slate-100 mb-4">Rent vs Expenses</h2>
         <div class="mb-4">
           <RentExpenseDonutChart :series="rentExpenseSeries" />
         </div>
 
         <div class="space-y-3">
-          <h3 class="text-lg font-semibold text-gray-900 border-b pb-2">ROI Calculator</h3>
-          <div class="grid grid-cols-2 gap-2">
-            <label class="text-sm text-gray-600">Purchase Price</label>
-            <input v-model.number="purchasePrice" type="number" class="input" placeholder="e.g. 250000" @input="saveInputs" />
-            <label class="text-sm text-gray-600">Current Value</label>
-            <input v-model.number="currentValue" type="number" class="input" placeholder="e.g. 300000" @input="saveInputs" />
-            <label class="text-sm text-gray-600">Annual Rent</label>
-            <input v-model.number="annualRent" type="number" class="input" placeholder="e.g. 36000" @input="saveInputs" />
-            <label class="text-sm text-gray-600">Annual Expenses</label>
-            <input v-model.number="annualExpenses" type="number" class="input" placeholder="e.g. 14400" @input="saveInputs" />
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-slate-100 border-b dark:border-slate-700 pb-2">ROI Calculator</h3>
+          <div class="space-y-3">
+            <div>
+              <label class="block text-sm text-gray-600 dark:text-slate-400 mb-1">Purchase Price</label>
+              <input v-model.number="purchasePrice" type="number" class="input w-full" placeholder="e.g. 250000" @input="saveInputs" />
+            </div>
+            <div>
+              <label class="block text-sm text-gray-600 dark:text-slate-400 mb-1">Current Value</label>
+              <input v-model.number="currentValue" type="number" class="input w-full" placeholder="e.g. 300000" @input="saveInputs" />
+            </div>
+            <div>
+              <label class="block text-sm text-gray-600 dark:text-slate-400 mb-1">Annual Rent</label>
+              <input v-model.number="annualRent" type="number" class="input w-full" placeholder="e.g. 36000" @input="saveInputs" />
+            </div>
+            <div>
+              <label class="block text-sm text-gray-600 dark:text-slate-400 mb-1">Annual Expenses</label>
+              <input v-model.number="annualExpenses" type="number" class="input w-full" placeholder="e.g. 14400" @input="saveInputs" />
+            </div>
           </div>
 
-          <div class="pt-3 border-t space-y-2">
-            <div class="flex items-center justify-between bg-blue-50 p-2 rounded">
+          <div class="pt-3 border-t dark:border-slate-700 space-y-2">
+            <div class="flex items-center justify-between bg-blue-50 dark:bg-slate-800 p-2 rounded">
               <div>
-                <div class="text-xs text-gray-600">ROI (on purchase)</div>
-                <div class="text-xl font-bold text-blue-600">{{ roiPercent !== null ? roiPercent.toFixed(2) + '%' : '—' }}</div>
+                <div class="text-xs text-gray-600 dark:text-slate-400">ROI (on purchase)</div>
+                <div class="text-xl font-bold text-blue-600 dark:text-blue-400">{{ roiPercent !== null ? roiPercent.toFixed(2) + '%' : '—' }}</div>
               </div>
               <div>
-                <div class="text-xs text-gray-600">Cap Rate</div>
-                <div class="text-xl font-bold text-green-600">{{ capRatePercent !== null ? capRatePercent.toFixed(2) + '%' : '—' }}</div>
+                <div class="text-xs text-gray-600 dark:text-slate-400">Cap Rate</div>
+                <div class="text-xl font-bold text-green-600 dark:text-green-400">{{ capRatePercent !== null ? capRatePercent.toFixed(2) + '%' : '—' }}</div>
               </div>
             </div>
             <div v-if="roiPercent !== null" class="text-xs text-gray-500 text-center">

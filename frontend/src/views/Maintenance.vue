@@ -45,16 +45,6 @@
           <option value="medium">Medium</option>
           <option value="low">Low</option>
         </select>
-        <select v-model="filterCategory" class="input">
-          <option value="">All Categories</option>
-          <option value="plumbing">Plumbing</option>
-          <option value="electrical">Electrical</option>
-          <option value="hvac">HVAC</option>
-          <option value="appliance">Appliance</option>
-          <option value="structural">Structural</option>
-          <option value="cosmetic">Cosmetic</option>
-          <option value="other">Other</option>
-        </select>
         <select v-model="filterProperty" class="input">
           <option value="">All Properties</option>
           <option v-for="property in propertyStore.properties" :key="property.id" :value="property.id">
@@ -65,11 +55,11 @@
     </div>
 
     <!-- Kanban Board -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
       <!-- New Column -->
-      <div class="bg-gray-50 rounded-lg p-4">
+      <div class="bg-gray-50 dark:bg-slate-800 rounded-lg p-4 min-w-[280px]">
         <div class="flex items-center justify-between mb-4">
-          <h3 class="font-bold text-gray-900 flex items-center gap-2">
+          <h3 class="font-bold text-gray-900 dark:text-slate-100 flex items-center gap-2">
             <span class="w-3 h-3 bg-red-500 rounded-full"></span>
             New
           </h3>
@@ -93,7 +83,7 @@
             </div>
             <p class="text-sm text-gray-600 mb-2">{{ request.description }}</p>
             <div class="flex items-center justify-between text-xs text-gray-500">
-              <span>{{ getCategoryIcon(request.category) }} {{ request.category }}</span>
+              <span>{{ getCategoryIcon(request.priority) }} {{ request.priority }}</span>
               <span>{{ formatDate(request.created_at) }}</span>
             </div>
             <div class="mt-2 text-xs text-gray-600">
@@ -104,7 +94,7 @@
       </div>
 
       <!-- Assigned Column -->
-      <div class="bg-gray-50 rounded-lg p-4">
+      <div class="bg-gray-50 dark:bg-slate-800 rounded-lg p-4 min-w-[280px]">
         <div class="flex items-center justify-between mb-4">
           <h3 class="font-bold text-gray-900 flex items-center gap-2">
             <span class="w-3 h-3 bg-yellow-500 rounded-full"></span>
@@ -128,23 +118,23 @@
                 {{ request.priority }}
               </span>
             </div>
-            <p class="text-sm text-gray-600 mb-2">{{ request.description }}</p>
-            <div class="flex items-center justify-between text-xs text-gray-500 mb-2">
-              <span>{{ getCategoryIcon(request.category) }} {{ request.category }}</span>
+            <p class="text-sm text-gray-600 dark:text-slate-400 mb-2">{{ request.description }}</p>
+            <div class="flex items-center justify-between text-xs text-gray-500 dark:text-slate-500 mb-2">
+              <span>{{ getCategoryIcon(request.priority) }} {{ request.priority }}</span>
               <span>{{ formatDate(request.created_at) }}</span>
             </div>
-            <div class="text-xs text-gray-600">
+            <div class="text-xs text-gray-600 dark:text-slate-400">
               {{ getPropertyTitle(request.property_id) }}
             </div>
-            <div v-if="request.assigned_to" class="mt-2 text-xs text-blue-600 flex items-center gap-1">
-              👤 {{ request.assigned_to }}
+            <div v-if="request.contractor" class="mt-2 text-xs text-blue-600 dark:text-blue-400 flex items-center gap-1">
+              👤 {{ request.contractor }}
             </div>
           </div>
         </div>
       </div>
 
       <!-- In Progress Column -->
-      <div class="bg-gray-50 rounded-lg p-4">
+      <div class="bg-gray-50 dark:bg-slate-800 rounded-lg p-4 min-w-[280px]">
         <div class="flex items-center justify-between mb-4">
           <h3 class="font-bold text-gray-900 flex items-center gap-2">
             <span class="w-3 h-3 bg-blue-500 rounded-full"></span>
@@ -170,24 +160,24 @@
             </div>
             <p class="text-sm text-gray-600 mb-2">{{ request.description }}</p>
             <div class="flex items-center justify-between text-xs text-gray-500 mb-2">
-              <span>{{ getCategoryIcon(request.category) }} {{ request.category }}</span>
+              <span>{{ getCategoryIcon(request.priority) }} {{ request.priority }}</span>
               <span>{{ formatDate(request.created_at) }}</span>
             </div>
             <div class="text-xs text-gray-600">
               {{ getPropertyTitle(request.property_id) }}
             </div>
-            <div v-if="request.assigned_to" class="mt-2 text-xs text-blue-600 flex items-center gap-1">
-              👤 {{ request.assigned_to }}
+            <div v-if="request.contractor" class="mt-2 text-xs text-blue-600 dark:text-blue-400 flex items-center gap-1">
+              👤 {{ request.contractor }}
             </div>
-            <div v-if="request.estimated_cost" class="mt-2 text-xs text-gray-700 font-medium">
-              Est. Cost: ${{ request.estimated_cost.toLocaleString() }}
+            <div v-if="request.cost" class="mt-2 text-xs text-gray-700 dark:text-slate-300 font-medium">
+              Est. Cost: ${{ request.cost.toLocaleString() }}
             </div>
           </div>
         </div>
       </div>
 
       <!-- Completed Column -->
-      <div class="bg-gray-50 rounded-lg p-4">
+      <div class="bg-gray-50 dark:bg-slate-800 rounded-lg p-4 min-w-[280px]">
         <div class="flex items-center justify-between mb-4">
           <h3 class="font-bold text-gray-900 flex items-center gap-2">
             <span class="w-3 h-3 bg-green-500 rounded-full"></span>
@@ -210,16 +200,16 @@
                 ✓
               </span>
             </div>
-            <p class="text-sm text-gray-600 mb-2">{{ request.description }}</p>
-            <div class="flex items-center justify-between text-xs text-gray-500 mb-2">
-              <span>{{ getCategoryIcon(request.category) }} {{ request.category }}</span>
-              <span>{{ formatDate(request.completed_at!) }}</span>
+            <p class="text-sm text-gray-600 dark:text-slate-400 mb-2">{{ request.description }}</p>
+            <div class="flex items-center justify-between text-xs text-gray-500 dark:text-slate-500 mb-2">
+              <span>{{ getCategoryIcon(request.priority) }} {{ request.priority }}</span>
+              <span>{{ formatDate(request.completed_date!) }}</span>
             </div>
-            <div class="text-xs text-gray-600">
+            <div class="text-xs text-gray-600 dark:text-slate-400">
               {{ getPropertyTitle(request.property_id) }}
             </div>
-            <div v-if="request.actual_cost" class="mt-2 text-xs text-gray-900 font-medium">
-              Cost: ${{ request.actual_cost.toLocaleString() }}
+            <div v-if="request.cost" class="mt-2 text-xs text-gray-900 dark:text-slate-100 font-medium">
+              Cost: ${{ request.cost.toLocaleString() }}
             </div>
           </div>
         </div>
@@ -251,38 +241,38 @@
             <p class="text-gray-600">{{ selectedRequest.description }}</p>
           </div>
 
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <h3 class="font-medium text-gray-900 mb-1">Category</h3>
-              <p class="text-gray-600">{{ getCategoryIcon(selectedRequest.category) }} {{ selectedRequest.category }}</p>
+              <h3 class="font-medium text-gray-900 dark:text-slate-100 mb-1">Priority</h3>
+              <p class="text-gray-600 dark:text-slate-400">{{ getCategoryIcon(selectedRequest.priority) }} {{ selectedRequest.priority }}</p>
             </div>
             <div>
-              <h3 class="font-medium text-gray-900 mb-1">Status</h3>
-              <p class="text-gray-600">{{ selectedRequest.status }}</p>
+              <h3 class="font-medium text-gray-900 dark:text-slate-100 mb-1">Status</h3>
+              <p class="text-gray-600 dark:text-slate-400">{{ selectedRequest.status }}</p>
             </div>
             <div>
-              <h3 class="font-medium text-gray-900 mb-1">Property</h3>
-              <p class="text-gray-600">{{ getPropertyTitle(selectedRequest.property_id) }}</p>
+              <h3 class="font-medium text-gray-900 dark:text-slate-100 mb-1">Property</h3>
+              <p class="text-gray-600 dark:text-slate-400">{{ getPropertyTitle(selectedRequest.property_id) }}</p>
             </div>
             <div>
-              <h3 class="font-medium text-gray-900 mb-1">Created</h3>
-              <p class="text-gray-600">{{ formatDate(selectedRequest.created_at) }}</p>
+              <h3 class="font-medium text-gray-900 dark:text-slate-100 mb-1">Created</h3>
+              <p class="text-gray-600 dark:text-slate-400">{{ formatDate(selectedRequest.created_at) }}</p>
             </div>
           </div>
 
-          <div v-if="selectedRequest.assigned_to">
-            <h3 class="font-medium text-gray-900 mb-1">Assigned To</h3>
-            <p class="text-gray-600">{{ selectedRequest.assigned_to }}</p>
+          <div v-if="selectedRequest.contractor">
+            <h3 class="font-medium text-gray-900 dark:text-slate-100 mb-1">Contractor</h3>
+            <p class="text-gray-600 dark:text-slate-400">{{ selectedRequest.contractor }}</p>
           </div>
 
-          <div v-if="selectedRequest.estimated_cost || selectedRequest.actual_cost" class="grid grid-cols-2 gap-4">
-            <div v-if="selectedRequest.estimated_cost">
-              <h3 class="font-medium text-gray-900 mb-1">Estimated Cost</h3>
-              <p class="text-gray-600">${{ selectedRequest.estimated_cost.toLocaleString() }}</p>
+          <div v-if="selectedRequest.cost" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <h3 class="font-medium text-gray-900 dark:text-slate-100 mb-1">Cost</h3>
+              <p class="text-gray-600 dark:text-slate-400">${{ selectedRequest.cost.toLocaleString() }}</p>
             </div>
-            <div v-if="selectedRequest.actual_cost">
-              <h3 class="font-medium text-gray-900 mb-1">Actual Cost</h3>
-              <p class="text-gray-600">${{ selectedRequest.actual_cost.toLocaleString() }}</p>
+            <div v-if="selectedRequest.scheduled_date">
+              <h3 class="font-medium text-gray-900 dark:text-slate-100 mb-1">Scheduled Date</h3>
+              <p class="text-gray-600 dark:text-slate-400">{{ formatDate(selectedRequest.scheduled_date) }}</p>
             </div>
           </div>
 
@@ -293,7 +283,7 @@
 
           <div class="pt-4 border-t">
             <h3 class="font-medium text-gray-900 mb-3">Before/After Photos</h3>
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div class="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center">
                 <span class="text-gray-400">Before Photo</span>
               </div>
@@ -306,26 +296,27 @@
 
         <div class="flex justify-end gap-2 mt-6">
           <button @click="selectedRequest = null" class="btn btn-secondary">Close</button>
-          <button class="btn btn-primary">Edit Request</button>
+          <button @click="openEditModal(selectedRequest)" class="btn btn-primary">Edit Request</button>
+          <button @click="handleDelete(selectedRequest.id)" class="btn btn-danger">Delete</button>
         </div>
       </div>
     </div>
 
     <!-- Add Request Modal -->
-    <div
+    <MaintenanceForm
       v-if="showAddRequestModal"
-      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
-      @click.self="showAddRequestModal = false"
-    >
-      <div class="bg-white rounded-lg p-6 max-w-md w-full">
-        <h2 class="text-2xl font-bold mb-4">New Maintenance Request</h2>
-        <p class="text-gray-600 mb-4">Request creation form will be implemented in the next phase.</p>
-        <div class="flex justify-end space-x-2">
-          <button @click="showAddRequestModal = false" class="btn btn-secondary">Cancel</button>
-          <button class="btn btn-primary">Create</button>
-        </div>
-      </div>
-    </div>
+      @close="closeModal"
+      @submit="handleSubmit"
+    />
+
+    <!-- Edit Request Modal -->
+    <MaintenanceForm
+      v-if="showEditRequestModal && editingRequest"
+      :request="editingRequest"
+      :is-edit="true"
+      @close="closeModal"
+      @submit="handleSubmit"
+    />
   </div>
 </template>
 
@@ -333,235 +324,33 @@
 import { ref, computed, onMounted } from 'vue'
 import { format } from 'date-fns'
 import { usePropertyStore } from '@/stores/propertyStore'
+import { useMaintenanceStore } from '@/stores/maintenanceStore'
+import MaintenanceForm from '@/components/MaintenanceForm.vue'
+import type { MaintenanceRecord } from '@/types'
 
 const propertyStore = usePropertyStore()
-
-interface MaintenanceRequest {
-  id: number
-  title: string
-  description: string
-  category: string
-  priority: string
-  status: string
-  property_id: number
-  assigned_to: string | null
-  estimated_cost: number | null
-  actual_cost: number | null
-  created_at: string
-  completed_at: string | null
-  notes: string | null
-}
+const maintenanceStore = useMaintenanceStore()
 
 const showAddRequestModal = ref(false)
-const selectedRequest = ref<MaintenanceRequest | null>(null)
+const showEditRequestModal = ref(false)
+const selectedRequest = ref<MaintenanceRecord | null>(null)
+const editingRequest = ref<MaintenanceRecord | null>(null)
 const filterPriority = ref('')
-const filterCategory = ref('')
 const filterProperty = ref<number | ''>('')
 
-const requests = ref<MaintenanceRequest[]>([])
-
-const generateSampleRequests = () => {
-  const today = new Date()
-  const sampleRequests: MaintenanceRequest[] = [
-    // New requests
-    {
-      id: 1,
-      title: 'Leaking Kitchen Faucet',
-      description: 'Kitchen sink faucet has a constant drip causing water waste',
-      category: 'plumbing',
-      priority: 'high',
-      status: 'new',
-      property_id: 1,
-      assigned_to: null,
-      estimated_cost: null,
-      actual_cost: null,
-      created_at: format(today, 'yyyy-MM-dd'),
-      completed_at: null,
-      notes: null
-    },
-    {
-      id: 2,
-      title: 'Broken Window Lock',
-      description: 'Bedroom window lock is broken, security concern',
-      category: 'structural',
-      priority: 'urgent',
-      status: 'new',
-      property_id: 2,
-      assigned_to: null,
-      estimated_cost: null,
-      actual_cost: null,
-      created_at: format(today, 'yyyy-MM-dd'),
-      completed_at: null,
-      notes: null
-    },
-    {
-      id: 3,
-      title: 'Paint Touch-up Needed',
-      description: 'Hallway walls need paint touch-up after tenant move-out',
-      category: 'cosmetic',
-      priority: 'low',
-      status: 'new',
-      property_id: 3,
-      assigned_to: null,
-      estimated_cost: null,
-      actual_cost: null,
-      created_at: format(new Date(today.getTime() - 86400000), 'yyyy-MM-dd'),
-      completed_at: null,
-      notes: null
-    },
-    // Assigned requests
-    {
-      id: 4,
-      title: 'HVAC Annual Service',
-      description: 'Scheduled annual HVAC maintenance and filter replacement',
-      category: 'hvac',
-      priority: 'medium',
-      status: 'assigned',
-      property_id: 1,
-      assigned_to: 'Mike Johnson - HVAC Pro',
-      estimated_cost: 250,
-      actual_cost: null,
-      created_at: format(new Date(today.getTime() - 172800000), 'yyyy-MM-dd'),
-      completed_at: null,
-      notes: 'Scheduled for next Tuesday'
-    },
-    {
-      id: 5,
-      title: 'Replace Dishwasher',
-      description: 'Dishwasher motor failed, needs replacement',
-      category: 'appliance',
-      priority: 'high',
-      status: 'assigned',
-      property_id: 4,
-      assigned_to: 'Sarah Lee - Appliance Repair',
-      estimated_cost: 650,
-      actual_cost: null,
-      created_at: format(new Date(today.getTime() - 259200000), 'yyyy-MM-dd'),
-      completed_at: null,
-      notes: 'Tenant has been provided with temporary unit'
-    },
-    // In Progress requests
-    {
-      id: 6,
-      title: 'Electrical Outlet Repair',
-      description: 'Living room outlet not working, possible wiring issue',
-      category: 'electrical',
-      priority: 'urgent',
-      status: 'in_progress',
-      property_id: 2,
-      assigned_to: 'Tom Davis - Electric Solutions',
-      estimated_cost: 180,
-      actual_cost: null,
-      created_at: format(new Date(today.getTime() - 345600000), 'yyyy-MM-dd'),
-      completed_at: null,
-      notes: 'Electrician on-site, diagnosing issue'
-    },
-    {
-      id: 7,
-      title: 'Garage Door Spring',
-      description: 'Garage door spring broken, door won\'t open',
-      category: 'structural',
-      priority: 'high',
-      status: 'in_progress',
-      property_id: 5,
-      assigned_to: 'Bob Wilson - Garage Services',
-      estimated_cost: 320,
-      actual_cost: null,
-      created_at: format(new Date(today.getTime() - 432000000), 'yyyy-MM-dd'),
-      completed_at: null,
-      notes: 'Parts ordered, installation scheduled'
-    },
-    {
-      id: 8,
-      title: 'Landscaping Maintenance',
-      description: 'Quarterly landscaping and lawn care',
-      category: 'other',
-      priority: 'low',
-      status: 'in_progress',
-      property_id: 3,
-      assigned_to: 'Green Thumb Landscaping',
-      estimated_cost: 150,
-      actual_cost: null,
-      created_at: format(new Date(today.getTime() - 518400000), 'yyyy-MM-dd'),
-      completed_at: null,
-      notes: 'In progress, completing this week'
-    },
-    // Completed requests
-    {
-      id: 9,
-      title: 'Toilet Repair',
-      description: 'Running toilet causing high water bill',
-      category: 'plumbing',
-      priority: 'medium',
-      status: 'completed',
-      property_id: 1,
-      assigned_to: 'Jack Smith - Plumbing Plus',
-      estimated_cost: 120,
-      actual_cost: 135,
-      created_at: format(new Date(today.getTime() - 604800000), 'yyyy-MM-dd'),
-      completed_at: format(new Date(today.getTime() - 86400000), 'yyyy-MM-dd'),
-      notes: 'Replaced flapper valve and fill tube'
-    },
-    {
-      id: 10,
-      title: 'Smoke Detector Battery',
-      description: 'Replace batteries in all smoke detectors',
-      category: 'other',
-      priority: 'medium',
-      status: 'completed',
-      property_id: 2,
-      assigned_to: 'Property Manager',
-      estimated_cost: 30,
-      actual_cost: 25,
-      created_at: format(new Date(today.getTime() - 691200000), 'yyyy-MM-dd'),
-      completed_at: format(new Date(today.getTime() - 604800000), 'yyyy-MM-dd'),
-      notes: 'All units tested and working'
-    },
-    {
-      id: 11,
-      title: 'Gutter Cleaning',
-      description: 'Clean gutters and downspouts before winter',
-      category: 'structural',
-      priority: 'low',
-      status: 'completed',
-      property_id: 4,
-      assigned_to: 'Clean Sweep Services',
-      estimated_cost: 200,
-      actual_cost: 200,
-      created_at: format(new Date(today.getTime() - 777600000), 'yyyy-MM-dd'),
-      completed_at: format(new Date(today.getTime() - 691200000), 'yyyy-MM-dd'),
-      notes: 'All gutters cleaned and inspected'
-    },
-    {
-      id: 12,
-      title: 'Air Filter Replacement',
-      description: 'Replace HVAC air filters in all units',
-      category: 'hvac',
-      priority: 'low',
-      status: 'completed',
-      property_id: 5,
-      assigned_to: 'Property Manager',
-      estimated_cost: 50,
-      actual_cost: 45,
-      created_at: format(new Date(today.getTime() - 864000000), 'yyyy-MM-dd'),
-      completed_at: format(new Date(today.getTime() - 777600000), 'yyyy-MM-dd'),
-      notes: 'Scheduled for next quarter'
-    }
-  ]
-  requests.value = sampleRequests
-}
+const requests = computed(() => maintenanceStore.requests)
 
 const filteredRequests = computed(() => {
   return requests.value.filter(request => {
     if (filterPriority.value && request.priority !== filterPriority.value) return false
-    if (filterCategory.value && request.category !== filterCategory.value) return false
+    // Note: category field removed, filtering by priority only
     if (filterProperty.value && request.property_id !== filterProperty.value) return false
     return true
   })
 })
 
-const newRequests = computed(() => filteredRequests.value.filter(r => r.status === 'new'))
-const assignedRequests = computed(() => filteredRequests.value.filter(r => r.status === 'assigned'))
+const newRequests = computed(() => filteredRequests.value.filter(r => r.status === 'new' || r.status === 'pending'))
+const assignedRequests = computed(() => filteredRequests.value.filter(r => r.status === 'assigned' || r.status === 'scheduled'))
 const inProgressRequestsList = computed(() => filteredRequests.value.filter(r => r.status === 'in_progress'))
 const completedRequestsList = computed(() => filteredRequests.value.filter(r => r.status === 'completed'))
 
@@ -570,11 +359,11 @@ const inProgressRequests = computed(() => assignedRequests.value.length + inProg
 const completedRequests = computed(() => completedRequestsList.value.length)
 
 const avgCompletionTime = computed(() => {
-  const completed = requests.value.filter(r => r.status === 'completed' && r.completed_at)
+  const completed = requests.value.filter(r => r.status === 'completed' && r.completed_date)
   if (completed.length === 0) return 0
   const totalDays = completed.reduce((sum, r) => {
     const created = new Date(r.created_at)
-    const completedDate = new Date(r.completed_at!)
+    const completedDate = new Date(r.completed_date!)
     const days = Math.floor((completedDate.getTime() - created.getTime()) / (1000 * 60 * 60 * 24))
     return sum + days
   }, 0)
@@ -582,20 +371,18 @@ const avgCompletionTime = computed(() => {
 })
 
 const totalCost = computed(() => {
-  return requests.value.reduce((sum, r) => sum + (r.actual_cost || 0), 0)
+  return requests.value.reduce((sum, r) => sum + (r.cost || 0), 0)
 })
 
-const getCategoryIcon = (category: string) => {
+const getCategoryIcon = (priority: string) => {
+  // Map priority to icons for visual clarity
   const icons: Record<string, string> = {
-    plumbing: '🚰',
-    electrical: '⚡',
-    hvac: '❄️',
-    appliance: '🔌',
-    structural: '🏗️',
-    cosmetic: '🎨',
-    other: '🔧'
+    urgent: '🚨',
+    high: '⚠️',
+    medium: '🔧',
+    low: '📋'
   }
-  return icons[category] || '🔧'
+  return icons[priority] || '🔧'
 }
 
 const getPriorityBadgeClass = (priority: string) => {
@@ -627,11 +414,51 @@ const getPropertyTitle = (propertyId: number) => {
   return property ? property.title : 'Unknown Property'
 }
 
-const viewRequestDetails = (request: MaintenanceRequest) => {
+const viewRequestDetails = (request: MaintenanceRecord) => {
   selectedRequest.value = request
 }
 
-onMounted(() => {
-  generateSampleRequests()
+async function handleSubmit(requestData: Partial<MaintenanceRecord>) {
+  try {
+    if (editingRequest.value) {
+      await maintenanceStore.updateRequest(editingRequest.value.id, requestData)
+    } else {
+      await maintenanceStore.createRequest(requestData)
+    }
+    closeModal()
+  } catch (error) {
+    console.error('Failed to save maintenance request:', error)
+  }
+}
+
+function openEditModal(request: MaintenanceRecord) {
+  editingRequest.value = request
+  showEditRequestModal.value = true
+  selectedRequest.value = null
+}
+
+async function handleDelete(id: number) {
+  if (!confirm('Are you sure you want to delete this request? This action cannot be undone.')) {
+    return
+  }
+  try {
+    await maintenanceStore.deleteRequest(id)
+    selectedRequest.value = null
+  } catch (error) {
+    console.error('Failed to delete request:', error)
+  }
+}
+
+function closeModal() {
+  showAddRequestModal.value = false
+  showEditRequestModal.value = false
+  editingRequest.value = null
+}
+
+onMounted(async () => {
+  await Promise.all([
+    maintenanceStore.fetchRequests(),
+    propertyStore.fetchProperties()
+  ])
 })
 </script>
