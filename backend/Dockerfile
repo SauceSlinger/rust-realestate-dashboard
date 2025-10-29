@@ -1,5 +1,5 @@
 # Backend Dockerfile
-FROM rust:1.75 as builder
+FROM rustlang/rust:nightly as builder
 
 WORKDIR /usr/src/app
 
