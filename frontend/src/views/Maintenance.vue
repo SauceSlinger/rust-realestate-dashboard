@@ -363,11 +363,12 @@ const avgCompletionTime = computed(() => {
   if (completed.length === 0) return 0
   const totalDays = completed.reduce((sum, r) => {
     const created = new Date(r.created_at)
-    const completedDate = new Date(r.completed_date!)
+    const completedDate = r.completed_date ? new Date(r.completed_date) : new Date(NaN)
+    if (isNaN(created.getTime()) || isNaN(completedDate.getTime())) return sum
     const days = Math.floor((completedDate.getTime() - created.getTime()) / (1000 * 60 * 60 * 24))
     return sum + days
   }, 0)
-  return Math.round(totalDays / completed.length)
+  return completed.length === 0 ? 0 : Math.round(totalDays / completed.length)
 })
 
 const totalCost = computed(() => {
@@ -405,8 +406,11 @@ const getPriorityBorderClass = (priority: string) => {
   return classes[priority] || classes.medium
 }
 
-const formatDate = (dateStr: string) => {
-  return format(new Date(dateStr), 'MMM dd, yyyy')
+const formatDate = (dateStr?: string | null) => {
+  if (!dateStr) return '—'
+  const d = new Date(dateStr)
+  if (isNaN(d.getTime())) return '—'
+  return format(d, 'MMM dd, yyyy')
 }
 
 const getPropertyTitle = (propertyId: number) => {

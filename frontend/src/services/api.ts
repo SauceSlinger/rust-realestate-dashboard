@@ -1,7 +1,22 @@
 import axios from 'axios'
 import type { Property, CreateProperty, Tenant, CalendarEvent, MaintenanceRecord, MarketAnalytics, TrendData } from '@/types'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api'
+const API_BASE_URL = (() => {
+  // Prefer build-time environment if set to a non-default value
+  const env = import.meta.env.VITE_API_BASE_URL
+  if (env && env !== '/api') return env
+
+  // Runtime fallback: when the site is served from GitHub Pages, use the Render backend
+  if (typeof window !== 'undefined') {
+    const host = window.location.hostname
+    if (host === 'sauceslinger.github.io') {
+      return 'https://rust-realestate-backend.onrender.com/api'
+    }
+  }
+
+  // Default to same-origin /api for local development (proxied in vite)
+  return '/api'
+})()
 
 const api = axios.create({
   baseURL: API_BASE_URL,
