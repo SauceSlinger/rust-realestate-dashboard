@@ -2,6 +2,8 @@
 
 A full-stack real estate dashboard built with Rust (Axum) and Vue 3 (TypeScript) for tracking market insights, managing properties, tenants, and maintenance schedules.
 
+**Currently Hosted at:** https://sauceslinger.github.io/rust-realestate-dashboard/
+
 ## 🚀 Features
 
 ### Property Management
