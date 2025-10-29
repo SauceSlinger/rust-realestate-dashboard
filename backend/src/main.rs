@@ -1,22 +1,22 @@
 use axum::{
-    routing::{get, post, put, delete},
-    Router,
     http::{
         header::{ACCEPT, AUTHORIZATION, CONTENT_TYPE},
         HeaderValue, Method,
     },
+    routing::{delete, get, post, put},
+    Router,
 };
+use sqlx::sqlite::SqlitePool;
+use std::net::SocketAddr;
 use tower_http::cors::CorsLayer;
 use tower_http::trace::TraceLayer;
-use std::net::SocketAddr;
-use sqlx::sqlite::SqlitePool;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 mod config;
+mod db;
 mod error;
 mod models;
 mod routes;
-mod db;
 mod scraper;
 
 use config::Config;
@@ -35,15 +35,13 @@ async fn main() -> Result<()> {
 
     // Load configuration
     let config = Config::from_env()?;
-    
+
     // Set up database connection pool
     let pool = SqlitePool::connect(&config.database_url).await?;
-    
+
     // Run migrations
-    sqlx::migrate!("./migrations")
-        .run(&pool)
-        .await?;
-    
+    sqlx::migrate!("./migrations").run(&pool).await?;
+
     tracing::info!("Database migrations completed");
 
     // Configure CORS
@@ -64,7 +62,7 @@ async fn main() -> Result<()> {
     // Start server
     let addr = SocketAddr::from(([0, 0, 0, 0], config.port));
     tracing::info!("Server listening on {}", addr);
-    
+
     let listener = tokio::net::TcpListener::bind(addr).await?;
     axum::serve(listener, app).await?;
 
@@ -86,27 +84,32 @@ fn api_routes() -> Router<SqlitePool> {
         .route("/properties", post(routes::properties::create_property))
         .route("/properties/:id", get(routes::properties::get_property))
         .route("/properties/:id", put(routes::properties::update_property))
-        .route("/properties/:id", delete(routes::properties::delete_property))
-        
+        .route(
+            "/properties/:id",
+            delete(routes::properties::delete_property),
+        )
         // Tenant routes
         .route("/tenants", get(routes::tenants::list_tenants))
         .route("/tenants", post(routes::tenants::create_tenant))
         .route("/tenants/:id", get(routes::tenants::get_tenant))
         .route("/tenants/:id", put(routes::tenants::update_tenant))
         .route("/tenants/:id", delete(routes::tenants::delete_tenant))
-        
         // Calendar/Events routes
         .route("/events", get(routes::events::list_events))
         .route("/events", post(routes::events::create_event))
         .route("/events/:id", get(routes::events::get_event))
         .route("/events/:id", put(routes::events::update_event))
         .route("/events/:id", delete(routes::events::delete_event))
-        
         // Maintenance routes
         .route("/maintenance", get(routes::maintenance::list_maintenance))
-        .route("/maintenance", post(routes::maintenance::create_maintenance))
-        .route("/maintenance/:id", put(routes::maintenance::update_maintenance))
-        
+        .route(
+            "/maintenance",
+            post(routes::maintenance::create_maintenance),
+        )
+        .route(
+            "/maintenance/:id",
+            put(routes::maintenance::update_maintenance),
+        )
         // Market data routes
         .route("/market/trends", get(routes::market::get_trends))
         .route("/market/analytics", get(routes::market::get_analytics))

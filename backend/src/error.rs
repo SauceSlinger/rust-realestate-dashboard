@@ -4,39 +4,25 @@ use axum::{
     Json,
 };
 use serde_json::json;
-use std::fmt;
 
 pub type Result<T> = std::result::Result<T, AppError>;
 
-#[derive(Debug)]
+#[derive(Debug, thiserror::Error)]
 pub enum AppError {
-    Database(sqlx::Error),
-    NotFound(String),
+    #[error("Database error: {0}")]
+    Database(#[from] sqlx::Error),
+    #[error("Bad request: {0}")]
+    #[allow(dead_code)]
     BadRequest(String),
-    Config(String),
-    Internal(String),
+    #[error("Not found: {0}")]
+    NotFound(String),
+    #[error("Scraper error: {0}")]
+    #[allow(dead_code)]
     Scraper(String),
-}
-
-impl fmt::Display for AppError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            AppError::Database(e) => write!(f, "Database error: {}", e),
-            AppError::NotFound(msg) => write!(f, "Not found: {}", msg),
-            AppError::BadRequest(msg) => write!(f, "Bad request: {}", msg),
-            AppError::Config(msg) => write!(f, "Configuration error: {}", msg),
-            AppError::Internal(msg) => write!(f, "Internal error: {}", msg),
-            AppError::Scraper(msg) => write!(f, "Scraper error: {}", msg),
-        }
-    }
-}
-
-impl std::error::Error for AppError {}
-
-impl From<sqlx::Error> for AppError {
-    fn from(err: sqlx::Error) -> Self {
-        AppError::Database(err)
-    }
+    #[error("Config error: {0}")]
+    Config(String),
+    #[error("Internal error: {0}")]
+    Internal(String),
 }
 
 impl From<sqlx::migrate::MigrateError> for AppError {

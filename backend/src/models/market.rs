@@ -1,8 +1,8 @@
-use serde::{Deserialize, Serialize};
-use sqlx::FromRow;
 use chrono::{DateTime, Utc};
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
+#[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
+#[allow(dead_code)]
 pub struct MarketData {
     pub id: i64,
     pub location: String, // city or zip code

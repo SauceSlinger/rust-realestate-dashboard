@@ -1,22 +1,22 @@
 // Market data scraper module
-use sqlx::SqlitePool;
 use crate::error::Result;
 use chrono::Utc;
+use sqlx::SqlitePool;
 
 pub async fn scrape_market_data(pool: &SqlitePool) -> Result<()> {
     tracing::info!("Starting market data scraping...");
-    
+
     // This is a placeholder for actual scraping logic
     // In production, you would:
     // 1. Make HTTP requests to real estate data sources
     // 2. Parse the HTML/JSON responses
     // 3. Extract relevant market data
     // 4. Store in the database
-    
+
     // Example: scraping mock data
     scrape_zillow_data(pool).await?;
     scrape_redfin_data(pool).await?;
-    
+
     tracing::info!("Market data scraping completed");
     Ok(())
 }
@@ -25,7 +25,7 @@ async fn scrape_zillow_data(pool: &SqlitePool) -> Result<()> {
     // Placeholder for Zillow scraping
     // In production, implement proper HTTP client and HTML parsing
     tracing::info!("Scraping Zillow data (placeholder)...");
-    
+
     // Example: Insert mock data
     sqlx::query(
         r#"
@@ -34,7 +34,7 @@ async fn scrape_zillow_data(pool: &SqlitePool) -> Result<()> {
             days_on_market, price_change_percent, data_source, recorded_date
         )
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        "#
+        "#,
     )
     .bind("San Francisco, CA")
     .bind(1_200_000.0)
@@ -46,14 +46,14 @@ async fn scrape_zillow_data(pool: &SqlitePool) -> Result<()> {
     .bind(Utc::now())
     .execute(pool)
     .await?;
-    
+
     Ok(())
 }
 
 async fn scrape_redfin_data(pool: &SqlitePool) -> Result<()> {
     // Placeholder for Redfin scraping
     tracing::info!("Scraping Redfin data (placeholder)...");
-    
+
     // Example: Insert mock data
     sqlx::query(
         r#"
@@ -62,7 +62,7 @@ async fn scrape_redfin_data(pool: &SqlitePool) -> Result<()> {
             days_on_market, price_change_percent, data_source, recorded_date
         )
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        "#
+        "#,
     )
     .bind("Seattle, WA")
     .bind(850_000.0)
@@ -74,7 +74,7 @@ async fn scrape_redfin_data(pool: &SqlitePool) -> Result<()> {
     .bind(Utc::now())
     .execute(pool)
     .await?;
-    
+
     Ok(())
 }
 
@@ -83,11 +83,12 @@ async fn scrape_redfin_data(pool: &SqlitePool) -> Result<()> {
 // - scrape_trulia_data
 // - etc.
 
+#[allow(dead_code)]
 pub async fn scrape_specific_location(_pool: &SqlitePool, location: &str) -> Result<()> {
     tracing::info!("Scraping data for location: {}", location);
-    
+
     // Implement location-specific scraping
     // This could fetch data from multiple sources for a specific area
-    
+
     Ok(())
 }
